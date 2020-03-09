@@ -3,7 +3,7 @@ CC=g++
 INC=-I$(BOOSTINC)
 
 CFLAGS=-c -Wall -std=c++0x -O2
-LDFLAGS=-L $(BOOSTLIB) -lboost_program_options
+LDFLAGS=-L $(BOOSTLIB) -lboost_program_options -lboost_system
 
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
