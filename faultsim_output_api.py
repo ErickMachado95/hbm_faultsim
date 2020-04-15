@@ -47,7 +47,7 @@ def main():
 
     if(HBM_none):
         read_results(x, y_none, 'HBM_none_out.txt')
-        y_none = np.array(y_none)
+        #y_none = np.array(y_none)
     if(HBM_BCH):
         read_results(x, y_BCH, 'HBM_BCH_out.txt')
         y_BCH = np.array(y_BCH)
@@ -55,7 +55,7 @@ def main():
         read_results(x, y_RS, 'HBM_RS_out.txt')
         y_RS = np.array(y_RS)
 
-    x = np.array(x)
+    #x = np.array(x)
     if(HBM_none):
         plt.plot(x, y_none, color='red', label='HBM_none')
     if(HBM_BCH):
@@ -64,9 +64,9 @@ def main():
         plt.plot(x, y_RS, color='green', label='HBM_RS')
 
     plt.legend(loc='upper left')
-    plt.title("Comparison of Different ECC Schemes", fontsize=16, fontweight='bold')
+    plt.title("FaultSim Results", fontsize=16, fontweight='bold')
     plt.xlabel("Weeks")
-    plt.ylabel("P(Fault-Cumu)")
+    plt.ylabel("P(Uncorrectable)")
     plt.show()
 
 
@@ -77,8 +77,8 @@ def read_results(x, y, fName):
         lines = f.readlines()
         for line in lines:
             if x_done == False:
-                x.append(line.split(',')[0])  # x is set to weeks
-            y.append(line.split(',')[4])  # y is set to P(Fault-Cumu)
+                x.append(int(line.split(',')[0]))  # x is set to weeks
+            y.append(float(line.split(',')[7]))  # y is set to P(Uncorrectable)
         x_done = True
 
 

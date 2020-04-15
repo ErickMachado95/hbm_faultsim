@@ -13,3 +13,6 @@ Ex.
 python3 faultsim_output_api.py -n=HBM_none.ini -b=HBM_BCH1.ini -r=HBM_RS512.ini
 
 This will faultsim for all the provided files and plot the results on one graph
+
+To change the Y-axis data, go into the code and change the y-column index in the read_results function.
+Currently it is set to P(Uncorrectable).
