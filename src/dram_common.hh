@@ -28,6 +28,8 @@ using namespace std;
 #define DRAM_1BANK 4
 #define DRAM_NBANK 5
 #define DRAM_NRANK 6
+#define DRAM_2WORD 7
+#define DRAM_8SPREAD 8
 #define DRAM_MAX 7
 
 // 64-bit random doubles for determining if failure happened

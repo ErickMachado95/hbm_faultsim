@@ -59,6 +59,8 @@ public:
         double trans_1bank;
         double trans_nbank;
         double trans_nrank;
+        double trans_2word;
+	double trans_8spread;
 
         //permanent
         double perm_1bit;
@@ -68,4 +70,6 @@ public:
         double perm_1bank;
         double perm_nbank;
         double perm_nrank;
+	double perm_2word;
+	double perm_8spread;
 };

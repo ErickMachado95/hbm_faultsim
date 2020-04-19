@@ -282,6 +282,8 @@ GroupDomain *genModule3D( void )
 				dram0->setFIT( DRAM_1BANK, 1, settings.trans_1bank);
 				dram0->setFIT( DRAM_NBANK, 1, settings.trans_nbank);
 				dram0->setFIT( DRAM_NRANK, 1, settings.trans_nrank);
+				dram0->setFIT( DRAM_2WORD, 1, settings.trans_2word);
+				dram0->setFIT( DRAM_8SPREAD, 1, settings.trans_8spread);
 			}
 
 			if( settings.enable_permanent ) {
@@ -292,6 +294,8 @@ GroupDomain *genModule3D( void )
 				dram0->setFIT( DRAM_1BANK, 0, settings.perm_1bank);
 				dram0->setFIT( DRAM_NBANK, 0, settings.perm_nbank);
 				dram0->setFIT( DRAM_NRANK, 0, settings.perm_nrank);
+				dram0->setFIT( DRAM_2WORD, 0, settings.perm_2word);
+				dram0->setFIT( DRAM_8SPREAD, 0, settings.perm_8spread);
 			}
 		} else {
 			assert(0);

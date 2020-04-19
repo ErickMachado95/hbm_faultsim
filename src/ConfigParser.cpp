@@ -68,6 +68,8 @@ void parser(char *ininame)
         settings.trans_1bank = pt.get<double>("FIT.trans_1bank");
         settings.trans_nbank = pt.get<double>("FIT.trans_nbank");
         settings.trans_nrank = pt.get<double>("FIT.trans_nrank");
+	settings.trans_2word = pt.get<double>("FIT.trans_2word");
+	settings.trans_8spread = pt.get<double>("FIT.trans_8spread");
 
         //permanent
         settings.perm_1bit = pt.get<double>("FIT.perm_1bit");
@@ -77,5 +79,6 @@ void parser(char *ininame)
         settings.perm_1bank = pt.get<double>("FIT.perm_1bank");
         settings.perm_nbank = pt.get<double>("FIT.perm_nbank");
         settings.perm_nrank = pt.get<double>("FIT.perm_nrank");
-
+	settings.perm_2word = pt.get<double>("FIT.perm_2word");
+	settings.perm_8spread = pt.get<double>("FIT.perm_8spread");
 }
