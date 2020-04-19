@@ -25,8 +25,8 @@ Synopsis::Synopsis(void){
 void Synopsis::init_file(const char* filename){
     FILE *fp_write = fopen(filename,"w");
     
-    fprintf(fp_write,"dram_module,sim_num,sim_stat,trans_1bit,trans_1word,trans_1col,trans_1row,trans_1bank,trans_nbank,trans_nrank,"
-           "perm_1bit,perm_1word,perm_1col,perm_1row,perm_1bank,perm_nbank,perm_nrank\n");
+    fprintf(fp_write,"dram_module,sim_num,sim_stat,trans_1bit,trans_1word,trans_1col,trans_1row,trans_1bank,trans_nbank,trans_nrank,trans_2word,trans_8spread,"
+           "perm_1bit,perm_1word,perm_1col,perm_1row,perm_1bank,perm_nbank,perm_nrank,perm_2word,perm_8spread\n");
 
     fclose(fp_write);
 
