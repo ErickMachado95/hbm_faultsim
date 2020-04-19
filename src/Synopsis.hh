@@ -5,8 +5,8 @@
 #include <iostream>
 
 
-#define TRANS_FAULT_AMNT 7 
-#define PERM_FAULT_AMNT 7
+#define TRANS_FAULT_AMNT 9 
+#define PERM_FAULT_AMNT 9
 
 extern int DRAMMODULES;
 

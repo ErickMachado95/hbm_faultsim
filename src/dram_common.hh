@@ -30,7 +30,7 @@ using namespace std;
 #define DRAM_NRANK 6
 #define DRAM_2WORD 7
 #define DRAM_8SPREAD 8
-#define DRAM_MAX 7
+#define DRAM_MAX 9
 
 // 64-bit random doubles for determining if failure happened
 typedef boost::mt19937_64                     ENG;    // Mersenne Twister

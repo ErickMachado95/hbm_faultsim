@@ -35,7 +35,7 @@ void Synopsis::init_file(const char* filename){
 
 void Synopsis::print_to_csv(void){
 
-    char buff1[1000]; //Just a quick buffer we can use, we don't expect the amount to go voer 1000
+    char buff1[1000]; //Just a quick buffer we can use, we don't expect the amount to go over 1000
     char buff2[1000];
     buff1[0] = '\0';
 

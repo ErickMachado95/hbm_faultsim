@@ -78,74 +78,111 @@ uint64_t EventSimulation::runOne( uint64_t max_s, int verbose, uint64_t bin_leng
 				if(currtime <= max_s){
 					double timestamp = currtime;
 					FaultRange *fr = NULL;
+					//transient faults
+					//1 bit
 					if(errtype==0)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 1, -1, 0);
 					}
+					//1 word
 					else if(errtype==1)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 1, -1, 0);
 					}
+					//1 col
 					else if(errtype==2)
 					{
 						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 1, -1, 0);
 					}
+					//1 row
 					else if(errtype==3)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 1, -1, 0);
 					}
+					//1 bank
 					else if(errtype==4)
 					{
 						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 1, -1, 0);
 					}
+					//N bank
 					else if(errtype==5)
 					{
 						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 1, -1, 0);
 					}
+					//N rank
 					else if(errtype==6)
 					{
 						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 1, -1, 0);
 					}
+					//New error type - two words next to each other in a row					
 					else if(errtype==7)
+					{
+						fr = pD->genTwoByteRange(1);
+					}
+					//New error type - bit 0 in each of 8 consecutive columns					
+					else if(errtype==8)
+					{
+						fr = pD->genEightBitAtByteIntervalRange(1);
+					}
+					
+					//permanent faults
+					//1 bit
+					else if(errtype==9)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 0, -1, 0);
 					}
-					else if(errtype==8)
+					//1 word
+					else if(errtype==10)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 0, -1, 0);
 					}
-					else if(errtype==9)
+					//1 col
+					else if(errtype==11)
 					{
 						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 0, -1, 0);
 					}
-					else if(errtype==10)
+					//1 row
+					else if(errtype==12)
 					{
 						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 0, -1, 0);
 					}
-					else if(errtype==11)
+					//1 bank
+					else if(errtype==13)
 					{
 						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 0, -1, 0);
 					}
-					else if(errtype==12)
+					//N banks
+					else if(errtype==14)
 					{
 						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 0, -1, 0);
 					}
-					else if(errtype==13)
+					//N ranks
+					else if(errtype==15)
 					{
 						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 0, -1, 0);
+					}
+					//New error type - two words next to each other in a row
+					else if(errtype==16)
+					{
+						fr = pD->genTwoByteRange(0);
+					}
+					//New error type - bit 0 in each of 8 consecutive columns
+					else if(errtype==17)
+					{
+						fr = pD->genEightBitAtByteIntervalRange(0);
 					}
 
 					fr->timestamp = timestamp;
 					if( fr->transient ){ 
                                             fr->m_pDRAM->n_faults_transient++; 
-                                            pD->event_fault_update(errtype%7,1);
-                                            SN[syn_i]->trans_faults[errtype%7]++;
+                                            pD->event_fault_update(errtype%DRAM_MAX,1);
+                                            SN[syn_i]->trans_faults[errtype%DRAM_MAX]++;
 
                                         }
 					else {
                                             fr->m_pDRAM->n_faults_permanent++;
-                                            pD->event_fault_update(errtype%7,0);
-                                            SN[syn_i]->perm_faults[errtype%7]++;
+                                            pD->event_fault_update(errtype%DRAM_MAX,0);
+                                            SN[syn_i]->perm_faults[errtype%DRAM_MAX]++;
                                         }
 					q1.push( fr );
 					//iter_num_errors++;
