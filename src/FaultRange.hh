@@ -41,6 +41,9 @@ public:
 	bool recent_touched;
 	uint64_t max_faults;
     	uint32_t Chip;  // Chip location of this fault range.
+        /* senior design code added for synopsis*/
+        uint32_t errtype;
+        uint32_t dram_mod_num;
 	
 	// For Event-driven simulation
 	double timestamp;	// time in seconds at which teh FR was inserted

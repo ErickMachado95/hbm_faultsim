@@ -135,7 +135,9 @@ uint64_t EventSimulation::runOne( uint64_t max_s, int verbose, uint64_t bin_leng
 						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 0, -1, 0);
 					}
 
+                                        fr->errtype = errtype;
 					fr->timestamp = timestamp;
+                                        fr->dram_mod_num = syn_i;//needed to keep what fault domain this belongs to aka which dram module 
 					if( fr->transient ){ 
                                             fr->m_pDRAM->n_faults_transient++; 
                                             pD->event_fault_update(errtype%7,1);
@@ -164,6 +166,7 @@ uint64_t EventSimulation::runOne( uint64_t max_s, int verbose, uint64_t bin_leng
 	uint64_t old_scrubid = 0;
 	uint64_t new_scrubid = 0;
 
+        bool one_time_flag = true; // one time flag needed so that we only get the first undetectable or uncorrectable error
 	//Run the Repair function: This will check the correctability/ detectability of the fault(s); Repairing is also done instantaneously
 	while( !q1.empty() ) {
       //  printf("calling repair\n");
@@ -192,31 +195,37 @@ uint64_t EventSimulation::runOne( uint64_t max_s, int verbose, uint64_t bin_leng
 		if (!cont_running)
 		    {
 				if( n_undetected || n_uncorrected ) {
-				// if any iteration fails to repair, halt the simulation and report failure
-				finalize();
-				//Update the appropriate Bin to log into the output file
-				bin = fr->timestamp/bin_length;
-				fail_time_bins[bin]++;
+                                    // if any iteration fails to repair, halt the simulation and report failure
+                                    finalize();
+                                    //Update the appropriate Bin to log into the output file
+                                    bin = fr->timestamp/bin_length;
+                                    fail_time_bins[bin]++;
 		    
-			if(n_uncorrected>0)
-			fail_uncorrectable[bin]++;
-			if(n_undetected>0)
-			fail_undetectable[bin]++;
+                                    if(n_uncorrected>0)
+                                    fail_uncorrectable[bin]++;
+                                    if(n_undetected>0)
+                                    fail_undetectable[bin]++;
+                                    if(one_time_flag)                                    
+                                        SN[fr->dram_mod_num]->the_straw = fr->errtype;
+                                    return 1;
 
-				return 1;
 				 }
 		    }
 		else 
 		{
 		    if(n_undetected ||n_uncorrected)
 			{
-			errors++;
-			bin = fr->timestamp/bin_length;
-				fail_time_bins[bin]++;
-			if(n_uncorrected>0)
-			fail_uncorrectable[bin]++;
-			if(n_undetected>0)
-			fail_undetectable[bin]++;
+                            errors++;
+                            bin = fr->timestamp/bin_length;
+                                    fail_time_bins[bin]++;
+                            if(n_uncorrected>0)
+                            fail_uncorrectable[bin]++;
+                            if(n_undetected>0)
+                            fail_undetectable[bin]++;
+                            if(one_time_flag){
+                                SN[fr->dram_mod_num]->the_straw = fr->errtype;
+                                one_time_flag = false;
+                            }
 			}
 		}
 
