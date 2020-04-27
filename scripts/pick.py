@@ -5,6 +5,7 @@ def filter_and_print(csv_name):
     dff = pd.read_csv("comp_f.csv")
     dfc = pd.read_csv("comp_c.csv")
 
+
     f_out = open(csv_name+"_f.csv","w")
     c_out = open(csv_name+"_c.csv","w")
     f_out.write("dram_module,sim_num,sim_stat,trans_1bit,trans_1word,trans_1col,trans_1row,trans_1bank,trans_nbank,trans_nrank,"
@@ -12,6 +13,7 @@ def filter_and_print(csv_name):
 
     c_out.write("dram_module,sim_num,sim_stat,trans_1bit,trans_1word,trans_1col,trans_1row,trans_1bank,trans_nbank,trans_nrank,"
     +"perm_1bit,perm_1word,perm_1col,perm_1row,perm_1bank,perm_nbank,perm_nrank\n")
+
     f = []
     c = []
 

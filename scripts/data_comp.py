@@ -19,6 +19,7 @@ def comp_run(file_name,iterations):
         for i in range(0,iterations):
             subprocess.run(["../faultsim","--configfile",file_path,"--outfile","out.txt"])
             df = pd.read_csv("synop.csv")
+            df = df.iloc[:,:17]
             dff = df.loc[df['sim_stat'] == 2]
             dfc = df.loc[df['sim_stat'] == 1]
             dff.to_csv("comp_f.csv",mode="a",index=False,header=False)
