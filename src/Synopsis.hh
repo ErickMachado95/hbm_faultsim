@@ -18,6 +18,7 @@ class Synopsis{
     int sim_stat; //The status of a simulation instance. 0 - no faults, 1 - Failure, 2 - faults but corrected/detected
     int trans_faults[TRANS_FAULT_AMNT]; // transient fault count for each type of transient fault
     int perm_faults[PERM_FAULT_AMNT]; // permanent fault count for each type of permanent fault
+    int the_straw; 
     
     Synopsis(void); 
     static void init_file(const char* filename);
