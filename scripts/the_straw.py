@@ -2,7 +2,7 @@ import pandas as pd
 
 
 def get_the_straws(csv_name):
-    df = pd.read_csv("synop.csv");
+    df = pd.read_csv("comp_s.csv");
 
     s_out = open(csv_name+"_s.csv","w")
 
@@ -11,10 +11,9 @@ def get_the_straws(csv_name):
 
     s_out.close()
 
-    df = df.loc[df['the_straw'] > 0]
+    df = df.loc[df['the_straw'] >= 0]
 
 
-    print(df)
     df.to_csv(csv_name+"_s.csv",mode="a",index=False,header=False)
 
 
