@@ -49,6 +49,7 @@ void parser(char *ininame)
 	settings.cube_ecc_tsv = pt.get<int>("Org.cube_ecc_tsv");
 	settings.cube_redun_tsv = pt.get<int>("Org.cube_redun_tsv");
 	settings.data_block_bits = pt.get<int>("Org.data_block_bits");
+        settings.word_bits = pt.get<int>("Org.word_size");
 
 	settings.faultmode = pt.get<int>("Fault.faultmode");
 	settings.enable_permanent = pt.get<int>("Fault.enable_permanent");
@@ -56,6 +57,7 @@ void parser(char *ininame)
 	settings.enable_tsv = pt.get<int>("Fault.enable_tsv");
 	settings.fit_factor = pt.get<double>("Fault.fit_factor");
 	settings.tsv_fit = pt.get<double>("Fault.tsv_fit");
+
 
 	settings.repairmode = pt.get<int>("ECC.repairmode");
         settings.symbol_size_bits = pt.get<int>("ECC.symbol_size_bits");
