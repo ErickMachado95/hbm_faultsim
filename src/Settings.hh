@@ -30,6 +30,7 @@ public:
 	int organization;	// Which topology to simulate e.g. DIMM or 3D stack
 	// Settings for all DRAMs
 	uint chips_per_rank, chip_bus_bits, ranks, banks, rows, cols;
+	uint word_size;
 
 	// Settings for 3D stacks
 	uint cube_model;				// TODO document
@@ -50,7 +51,7 @@ public:
 	int repairmode;     // Type of ECC to apply
 	//ReedSolomon symbol size
 	int symbol_size_bits;
-        int word_size;
+        
         //FIT 
         //transient
         double trans_1bit;

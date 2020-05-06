@@ -50,7 +50,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 			fr1->touched=0;
 		}
 	}
-
+ 
 	// Take each chip in turn.  For every fault range in a chip, see which neighbors intersect it's ECC block(s).
 	// Count the failed bits in each ECC block.
 	for( it0 = pChips->begin(); it0 != pChips->end(); it0++ )
@@ -72,21 +72,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 					cout << m_name << ": outer " << frTemp.toString() << "\n";
 				}
 
-				//bit_shift=m_log_block_bits;	//ECC every 64 byte i.e 512 bit granularity
-				if(m_n_correct==1) // Depending on the scheme, we will need to group the bits
-				{
-					bit_shift=2;	//SECDED will give ECC every 8 byte granularity, group by 4 locations in the fault range per chip
-				}
-				else if(m_n_correct == 3)
-				{
-					bit_shift=4;	//3EC4ED will give ECC every 32 byte granularity, group by 16 locations in the fault range per chip
-				}
-				else if (m_n_correct == 6)
-				{
-					bit_shift=5;	//6EC7ED will give ECC every 64 byte granularity, group by 32 locations in the fault range per chip
-				} else {
-					assert(0);
-				}
+				bit_shift=m_log_block_bits;	//ECC every 64 byte i.e 512 bit granularity
 
 				frTemp.fAddr = frTemp.fAddr >> bit_shift;
 				frTemp.fAddr = frTemp.fAddr << bit_shift;

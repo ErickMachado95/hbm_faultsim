@@ -32,7 +32,7 @@ void Synopsis::init_file(const char* filename){
 
     fclose(fp_write);
 
-    Synopsis::csv_fp = fopen(filename,"a");
+    Synopsis::csv_fp = fopen(filename, "a");
 }
 
 void Synopsis::print_to_csv(void){
@@ -71,7 +71,7 @@ void Synopsis::print_to_csv(void){
 
  
 
-    fprintf(Synopsis::csv_fp,buff1);
+    fprintf(Synopsis::csv_fp, "%s", buff1);
 
 
 

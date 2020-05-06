@@ -21,7 +21,7 @@ void CsvPrint::init(void){
 
 void CsvPrint::append_str(char* str){
 
-    fprintf(this->fp_append,str); 
+    fprintf(this->fp_append, "%s", str); 
 
 }
 

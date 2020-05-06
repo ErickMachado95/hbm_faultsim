@@ -23,7 +23,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 extern struct Settings settings;
 
-DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols ) : FaultDomain( name )
+DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols, uint32_t n_word_size ) : FaultDomain( name )
 , dist(0,1)
 , gen(eng,dist)
 , m_bitwidth( n_bitwidth )
@@ -31,6 +31,7 @@ DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint3
 , m_banks( n_banks )
 , m_rows( n_rows )
 , m_cols( n_cols )
+, m_word_size( n_word_size )
 {
 	struct timeval tv;
 	gettimeofday (&tv, NULL);
@@ -170,6 +171,7 @@ int DRAMDomain::update( uint test_mode_t )
 	}
 
 	// Insert TSV faults
+	// Not sure what this does... -nathan
 	if((cube_model_enable>0) && enable_tsv)
 	{
 		for(uint ii=(children_counter*cube_data_tsv); ii<((children_counter+1)*cube_data_tsv); ii++ )
@@ -184,7 +186,7 @@ int DRAMDomain::update( uint test_mode_t )
 
 					for(uint jj=0; jj<(m_cols*m_bitwidth/cube_data_tsv); jj++ )
 					{
-						m_faultRanges.push_back( genRandomRange( 0, 0, 0, 1, 1, false, (ii%cube_data_tsv)+(jj*cube_data_tsv), true ) );
+						m_faultRanges.push_back( genRandomRange( 0, 0, 0, 1, 0, 1, false, (ii%cube_data_tsv)+(jj*cube_data_tsv), true ) );
 						//cout << "|" <<(ii%cube_data_tsv)+(jj*cube_data_tsv)<< "|";
 					}
 					tsv_info[ii]=3;
@@ -197,7 +199,7 @@ int DRAMDomain::update( uint test_mode_t )
 
 					for(uint jj=0; jj<(m_cols*m_bitwidth/cube_data_tsv); jj++ )
 					{
-						m_faultRanges.push_back( genRandomRange( 0, 0, 0, 1, 1, true, (ii%cube_data_tsv)+(jj*cube_data_tsv), true ) );
+						m_faultRanges.push_back( genRandomRange( 0, 0, 0, 1, 0, 1, true, (ii%cube_data_tsv)+(jj*cube_data_tsv), true ) );
 						//cout << "|" <<(ii%cube_data_tsv)+(jj*cube_data_tsv)<< "|";
 					} 
 					tsv_info[ii]=4;
@@ -340,31 +342,31 @@ void DRAMDomain::generateRanges( int faultClass, bool transient )
 {
 	switch( faultClass ) {
 	case DRAM_1BIT:
-		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 1, 1,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 1, 0, 1, transient, -1, false) );
 		break;
 
 	case DRAM_1WORD:
-		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 1, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 1, 1, 0, transient, -1, false) );
 		break;
 
 	case DRAM_1COL:
-		m_faultRanges.push_back( genRandomRange( 1, 1, 0, 1, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 1, 0, 1, 0, 0, transient, -1, false) );
 		break;
 
 	case DRAM_1ROW:
-		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 0, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 1, 1, 0, 0, 0, transient, -1, false) );
 		break;
 
 	case DRAM_1BANK:
-		m_faultRanges.push_back( genRandomRange( 1, 1, 0, 0, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 1, 0, 0, 0, 0, transient, -1, false) );
 		break;
 
 	case DRAM_NBANK:
-		m_faultRanges.push_back( genRandomRange( 1, 0, 0, 0, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 1, 0, 0, 0, 0, 0, transient, -1, false) );
 		break;
 
 	case DRAM_NRANK:
-		m_faultRanges.push_back( genRandomRange( 0, 0, 0, 0, 0,transient, -1, false) );
+		m_faultRanges.push_back( genRandomRange( 0, 0, 0, 0, 0, 0, transient, -1, false) );
 		break;
 
 	default:
@@ -373,7 +375,7 @@ void DRAMDomain::generateRanges( int faultClass, bool transient )
 
 }
 
-FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col, bool bit, bool transient, int64_t rowbit_num, bool isTSV_t )
+FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col, bool word, bool bit, bool transient, int64_t rowbit_num, bool isTSV_t )
 {
 	FaultRange *fr = new FaultRange( this );
 	fr->fAddr = 0;
@@ -431,6 +433,9 @@ FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col
 
 		if( bit ) {
 			fr->fAddr |= (uint64_t)(eng32()%m_bitwidth);
+		} else if ( word ) {
+			fr->fWildMask |= (uint64_t)(m_word_size-1);
+			fr->max_faults *= m_word_size;
 		} else {
 			fr->fWildMask |= (uint64_t)(m_bitwidth-1);
 			fr->max_faults *= m_bitwidth;

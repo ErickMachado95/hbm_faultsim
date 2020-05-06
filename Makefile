@@ -9,6 +9,9 @@ SOURCES := $(wildcard src/*.cpp)
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=faultsim
 
+trying:
+	$(CC) $(SOURCES) $(INC) $(LDFLAGS) -o faultsim
+
 all: $(EXECUTABLE) doc
 
 $(EXECUTABLE): $(OBJECTS)
@@ -28,9 +31,6 @@ clean:
 
 doc:
 	cd doc && make
-
-trying:
-	$(CC) $(SOURCES) $(INC) $(LDFLAGS) -o faultsim
 
 debug:
 	$(CC) -g $(SOURCES) $(INC) $(LDFLAGS) -o faultsim

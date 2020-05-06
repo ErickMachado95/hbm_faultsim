@@ -26,7 +26,7 @@ typedef boost::mt19937						ENG32;
 class DRAMDomain : public FaultDomain
 {
 	public:
-	DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols);
+	DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols, uint32_t n_word_size);
 
 	void setFIT( int faultClass, bool isTransient, double FIT );
     void init( uint64_t interval, uint64_t sim_seconds, double fit_factor );
@@ -57,7 +57,7 @@ class DRAMDomain : public FaultDomain
 
 
 	void generateRanges( int faultClass, bool transient ); // based on a fault, create all faulty address ranges
-	FaultRange *genRandomRange( bool rank, bool bank, bool row, bool col, bool bit, bool transient, int64_t rowbit_num, bool isTSV_t );
+	FaultRange *genRandomRange( bool rank, bool bank, bool row, bool col, bool word, bool bit, bool transient, int64_t rowbit_num, bool isTSV_t );
 	FaultRange *genTwoByteRange(bool transient);
 	FaultRange *genEightBitAtByteIntervalRange(bool transient);
 
@@ -84,7 +84,7 @@ class DRAMDomain : public FaultDomain
 
 	uint64_t n_faults_transient_tsv, n_faults_permanent_tsv;
 
-	uint32_t m_bitwidth, m_ranks, m_banks, m_rows, m_cols;
+	uint32_t m_bitwidth, m_ranks, m_banks, m_rows, m_cols, m_word_size;
 	uint32_t m_logBits, m_logRanks, m_logBanks, m_logRows, m_logCols;
 };
 

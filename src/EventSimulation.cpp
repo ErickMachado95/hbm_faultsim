@@ -80,59 +80,59 @@ uint64_t EventSimulation::runOne( uint64_t max_s, int verbose, uint64_t bin_leng
 					FaultRange *fr = NULL;
 					if(errtype==0)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 1, 1, -1, 0); //TRANS_1BIT
 					}
 					else if(errtype==1)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 0, 1, -1, 0); //TRANS_1WORD
 					}
 					else if(errtype==2)
 					{
-						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 0, 1, -1, 0); //TRANS_1COL
 					}
 					else if(errtype==3)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 0, 1, -1, 0); //TRANS_1ROW
 					}
 					else if(errtype==4)
 					{
-						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 0, 1, -1, 0); //TRANS_1BANK
 					}
 					else if(errtype==5)
 					{
-						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 0, 1, -1, 0); //TRANS_NBANK
 					}
 					else if(errtype==6)
 					{
-						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 1, -1, 0);
+						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 0, 1, -1, 0); //TRANS_NRANK
 					}
 					else if(errtype==7)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 1, 0, -1, 0); //PERM_1BIT
 					}
 					else if(errtype==8)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 1, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 1, 1, 0, 0, -1, 0); //PERM_1WORD
 					}
 					else if(errtype==9)
 					{
-						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 0, 1, 0, 0, 0, -1, 0); //PERM_1COL
 					}
 					else if(errtype==10)
 					{
-						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 1, 0, 0, 0, 0, -1, 0); //PERM_1ROW
 					}
 					else if(errtype==11)
 					{
-						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 1, 0, 0, 0, 0, 0, -1, 0); //PERM_1BANK
 					}
 					else if(errtype==12)
 					{
-						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 1, 0, 0, 0, 0, 0, 0, -1, 0); //PERM_NBANK
 					}
 					else if(errtype==13)
 					{
-						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 0, -1, 0);
+						fr = pD->genRandomRange( 0, 0, 0, 0, 0, 0, 0, -1, 0); //PERM_NRANK
 					}
 
                                         fr->errtype = errtype;
