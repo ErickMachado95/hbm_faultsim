@@ -49,6 +49,7 @@ public:
 
 	// ECC configuration
 	int repairmode;     // Type of ECC to apply
+        int codeword_width;
 	//ReedSolomon symbol size
 	int symbol_size_bits;
         

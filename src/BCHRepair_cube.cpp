@@ -17,10 +17,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 extern struct Settings settings;
 
-BCHRepair_cube::BCHRepair_cube( string name, int n_correct, int n_detect, uint64_t data_block_bits ) : RepairScheme( name )
+BCHRepair_cube::BCHRepair_cube( string name, int n_correct, int n_detect, uint64_t data_block_bits, uint64_t codeword_width ) : RepairScheme( name )
 , m_n_correct(n_correct)
 , m_n_detect(n_detect)
 , m_bitwidth(data_block_bits)
+, m_codeword_width(codeword_width)
 {
 	counter_prev=0;
 	counter_now=0;
@@ -64,7 +65,10 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 			FaultRange *frOrg = (*itRange0); // The pointer to the fault location
 			FaultRange frTemp = *(*itRange0); //This is a fault location of a chip
 
-			uint32_t n_intersections = 0;
+			uint32_t n_intersections = 0;//current intersections of a codeword
+                        uint32_t tot_intersections = 0;//Total number of intersetctions
+                        uint32_t w_corrected = 0; // corrected intersections
+                        bool codeword_failure = false; // is set to true if a codword in cache line is not correctable
 			
 			if(frTemp.touched < frTemp.max_faults)
 			{
@@ -82,6 +86,16 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 
 				for(ii=0;ii<loopcount_locations;ii++)
 				{
+                                        if(ii%m_codeword_width  == 0){
+                                            if(n_intersections <= m_n_correct){
+                                                w_corrected += n_intersections;
+                                                n_intersections = 0;
+                                            }else{
+                                                n_intersections = 0; 
+                                                codeword_failure = true;
+                                            }
+                    
+                                        }
 					DRAMDomain *pDRAM1 = dynamic_cast<DRAMDomain*>((*it0));
 					list<FaultRange*> *pRange1 = pDRAM1->getRanges();
 					list<FaultRange*>::iterator itRange1;
@@ -99,6 +113,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 								if( settings.debug ) cout << m_name << ": INTERSECT " << n_intersections << "\n";
 
 								n_intersections++;
+                                                                tot_intersections++;
 
 								// There was a failed bit in at least one row of the FaultRange of interest.
 								// We now only care about further intersections that are in the overlapping
@@ -130,9 +145,10 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 				{
 					// correctable
 				}
-				if(n_intersections > m_n_correct)
+				if(n_intersections > m_n_correct || codeword_failure)
 				{
-					n_uncorrectable += (n_intersections - m_n_correct);
+					//n_uncorrectable += (n_intersections - m_n_correct);
+                                        n_uncorrectable += tot_intersections - w_corrected;
 					frOrg->transient_remove = false;
 					if( !settings.continue_running ) return;
 				}

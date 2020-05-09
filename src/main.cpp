@@ -304,16 +304,16 @@ GroupDomain *genModule3D( void )
 		ChipKillRepair_cube *ck0 = new ChipKillRepair_cube( string("CK1"), 1, 2, stack0);
 		stack0->addRepair( ck0 );
 	} else if( settings.repairmode == 2 ) {
-		CubeRAIDRepair *ck1 = new CubeRAIDRepair( string("RAID"), 1, 2, settings.data_block_bits );
+		CubeRAIDRepair *ck1 = new CubeRAIDRepair( string("RAID"), 1, 2, settings.data_block_bits);
 		stack0->addRepair( ck1 ); //settings.data_block_bits used as RAID is computed over 512 bits (in our design)
 	} else if( settings.repairmode == 3 ) {
-		BCHRepair_cube *bch0 = new BCHRepair_cube( string("SECDED"), 1, 2, settings.data_block_bits );
+		BCHRepair_cube *bch0 = new BCHRepair_cube( string("SECDED"), 1, 2, settings.data_block_bits ,settings.codeword_width);
 		stack0->addRepair( bch0 ); //settings.data_block_bits used as SECDED/3EC4ED/6EC7ED is computed over 512 bits (in our design)
 	} else if( settings.repairmode == 4 ) {
-		BCHRepair_cube *bch1 = new BCHRepair_cube( string("3EC4ED"), 3, 4, settings.data_block_bits );
+		BCHRepair_cube *bch1 = new BCHRepair_cube( string("3EC4ED"), 3, 4, settings.data_block_bits, settings.codeword_width );
 		stack0->addRepair( bch1 ); //Repair from Fault Domain
-	} else if( settings.repairmode == 5 && settings.data_block_bits == 512 ) {
-		BCHRepair_cube *bch2 = new BCHRepair_cube( string("6EC7ED"), 6, 7, settings.data_block_bits );
+	} else if( settings.repairmode == 5 ) {
+		BCHRepair_cube *bch2 = new BCHRepair_cube( string("6EC7ED"), 2, 3, settings.data_block_bits,settings.codeword_width );
 		stack0->addRepair( bch2 );
 	}
 	else if( settings.repairmode == 6  && settings.symbol_size_bits == 8) {

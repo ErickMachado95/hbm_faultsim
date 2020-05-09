@@ -23,6 +23,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 extern struct Settings settings;
 
+int temphack = 6;
+
 DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols, uint32_t n_word_size ) : FaultDomain( name )
 , dist(0,1)
 , gen(eng,dist)
@@ -434,8 +436,10 @@ FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col
 		if( bit ) {
 			fr->fAddr |= (uint64_t)(eng32()%m_bitwidth);
 		} else if ( word ) {
+			fr->fAddr |= (uint64_t)(temphack%m_bitwidth);
 			fr->fWildMask |= (uint64_t)(m_word_size-1);
 			fr->max_faults *= m_word_size;
+                        temphack += 4;
 		} else {
 			fr->fWildMask |= (uint64_t)(m_bitwidth-1);
 			fr->max_faults *= m_bitwidth;

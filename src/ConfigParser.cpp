@@ -61,6 +61,7 @@ void parser(char *ininame)
 
 	settings.repairmode = pt.get<int>("ECC.repairmode");
         settings.symbol_size_bits = pt.get<int>("ECC.symbol_size_bits");
+        settings.codeword_width = pt.get<int>("ECC.codeword_width");
         //FAIILURE IN TIME options
         //transient
         settings.trans_1bit = pt.get<double>("FIT.trans_1bit");
