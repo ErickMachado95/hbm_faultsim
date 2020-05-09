@@ -128,6 +128,8 @@ void DRAMDomain::event_fault_update(int fault,bool transient){
 
 int DRAMDomain::update( uint test_mode_t )
 {
+	cout << "Updating " << this->getName() << " with faults" << endl;
+
 	int newfault0 = 0;
 	int newfault1 = 0;
 	newfault0 = FaultDomain::update(test_mode_t); 

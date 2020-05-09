@@ -52,7 +52,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 		}
 	}
  
-	// Take each chip in turn.  For every fault range in a chip, see which neighbors intersect it's ECC block(s).
+	// Take each chip in turn.  For every fault range in a chip, see which neighbors intersect its ECC block(s).
 	// Count the failed bits in each ECC block.
 	for( it0 = pChips->begin(); it0 != pChips->end(); it0++ )
 	{
@@ -121,8 +121,8 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 								// to both FaultRanges.  This is achieved by;
 								// 1) Set upper mask bits to zero if they are not wild in range under test
 								// 2) For those wild bits that we cleared, use the specific address bit value
-								uint64_t fr1_fAddr_upper = (fr1->fAddr >> bit_shift) << bit_shift;
-								uint64_t frTemp_fAddr_lower = (frTemp.fAddr & ((0x1 << bit_shift)-1) );
+								uint64_t fr1_fAddr_upper = (fr1->fAddr >> bit_shift) << bit_shift; // clears the "cache line size" of fr1
+								uint64_t frTemp_fAddr_lower = (frTemp.fAddr & ((0x1 << bit_shift)-1) ); // frTemp gets the lower bits of the address? Aren't they all 0's?
 
 								uint64_t old_wild_mask = frTemp.fWildMask;
 								frTemp.fWildMask &= fr1->fWildMask;

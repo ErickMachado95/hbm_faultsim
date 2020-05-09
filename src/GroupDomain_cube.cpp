@@ -108,6 +108,8 @@ GroupDomain_cube::GroupDomain_cube( const char *name, uint cube_model_t, uint64_
 
 int GroupDomain_cube::update( uint test_mode_t )
 {
+	cout << "Updating GroupDomain_cube" << endl;
+
 	int newfault = 0;
 	uint64_t location=0;
 	//Check if TSVs are enabled
