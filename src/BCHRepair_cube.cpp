@@ -54,12 +54,14 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
  
 	// Take each chip in turn.  For every fault range in a chip, see which neighbors intersect its ECC block(s).
 	// Count the failed bits in each ECC block.
+	cout << "num of chips: " << pChips->size() << endl;
 	for( it0 = pChips->begin(); it0 != pChips->end(); it0++ )
 	{
 		DRAMDomain *pDRAM0 = dynamic_cast<DRAMDomain*>((*it0));
 		list<FaultRange*> *pRange0 = pDRAM0->getRanges();
 
 		list<FaultRange*>::iterator itRange0;
+		cout << "num of ranges: " << pRange0->size() << endl;
 		for( itRange0 = pRange0->begin(); itRange0 != pRange0->end(); itRange0++ )
 		{
 			FaultRange *frOrg = (*itRange0); // The pointer to the fault location
@@ -73,7 +75,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 			if(frTemp.touched < frTemp.max_faults)
 			{
 				if( settings.debug ) {
-					cout << m_name << ": outer " << frTemp.toString() << "\n";
+					cout << m_name << ": orig " << frTemp.toString() << "\n";
 				}
 
 				bit_shift=m_log_block_bits;	//ECC every 64 byte i.e 512 bit granularity
@@ -104,6 +106,7 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 						FaultRange *fr1 = (*itRange1);
 
 						if( settings.debug ) {
+							cout << m_name << ": outer_ " << frTemp.toString() << " bit " << ii << "\n";
 							cout << m_name << ": inner " << fr1->toString() << " bit " << ii << "\n";
 						}
 
@@ -114,6 +117,24 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 
 								n_intersections++;
                                                                 tot_intersections++;
+
+								// For this algorithm, one intersection with the bit being tested actually means one
+								// faulty bit in the
+								if(n_intersections <= m_n_correct)
+								{
+									// correctable
+								}
+								if(n_intersections > m_n_correct || codeword_failure)
+								{
+									//n_uncorrectable += (n_intersections - m_n_correct);
+															n_uncorrectable += tot_intersections - w_corrected;
+									frOrg->transient_remove = false;
+									if( !settings.continue_running ) return;
+								}
+								if(n_intersections >= m_n_detect)
+								{
+									n_undetectable += (n_intersections - m_n_detect);
+								}
 
 								// There was a failed bit in at least one row of the FaultRange of interest.
 								// We now only care about further intersections that are in the overlapping
@@ -139,23 +160,9 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
 					frTemp.fAddr = frTemp.fAddr + 1;
 				}
 
-				// For this algorithm, one intersection with the bit being tested actually means one
-				// faulty bit in the
-				if(n_intersections <= m_n_correct)
-				{
-					// correctable
-				}
-				if(n_intersections > m_n_correct || codeword_failure)
-				{
-					//n_uncorrectable += (n_intersections - m_n_correct);
-                                        n_uncorrectable += tot_intersections - w_corrected;
-					frOrg->transient_remove = false;
-					if( !settings.continue_running ) return;
-				}
-				if(n_intersections >= m_n_detect)
-				{
-					n_undetectable += (n_intersections - m_n_detect);
-				}
+
+				
+
 			}
 		}
 	}
