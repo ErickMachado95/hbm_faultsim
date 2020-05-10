@@ -15,6 +15,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <stdlib.h>
 #include <ctime>
 #include <cmath>
+#include <vector>
+#include <algorithm>    
+#include <random>       
 #include <sys/time.h>
 #include "faultsim.hh"
 #include "Settings.hh"
@@ -23,7 +26,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 extern struct Settings settings;
 
-int temphack = 6;
+
 
 DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint32_t n_banks, uint32_t n_rows, uint32_t n_cols, uint32_t n_word_size ) : FaultDomain( name )
 , dist(0,1)
@@ -38,6 +41,8 @@ DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint3
 	struct timeval tv;
 	gettimeofday (&tv, NULL);
 	gen.engine().seed(tv.tv_sec * 1000000 + (tv.tv_usec));
+
+	rng = default_random_engine { rd() };
 
 	//gettimeofday (&tv, NULL);
 	eng32.seed(tv.tv_sec * 1000000 + (tv.tv_usec));
@@ -57,6 +62,7 @@ DRAMDomain::DRAMDomain( char *name, uint32_t n_bitwidth, uint32_t n_ranks, uint3
 	m_logRows = log2( m_rows );
 	m_logCols = log2( m_cols );
 	m_logBits = log2( m_bitwidth );
+	m_logWord = log2( m_word_size );
 
 	curr_interval = 0;
 
@@ -438,12 +444,26 @@ FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col
 		if( bit ) {
 			fr->fAddr |= (uint64_t)(eng32()%m_bitwidth);
 		} else if ( word ) {
-			fr->fAddr |= (uint64_t)(temphack%m_bitwidth);
-			fr->fWildMask |= (uint64_t)(m_word_size-1);
+			fr->fAddr |= (uint64_t)(eng32()%m_bitwidth);
+
+			unsigned time = 0;
+
+			vector<int> rand_vec(m_logBits);
+			for(int i = 0; i < m_logBits; i++) {
+    			rand_vec[i] = i;
+			}
+			
+			shuffle(rand_vec.begin(), rand_vec.end(), rng);
+			for(int i = 0; i < m_logWord; i++) {
+				cout << rand_vec[i] << endl;
+				fr->fWildMask |= (uint64_t)(1 << rand_vec[i]);
+			}
+			cout << "-----------" <<  fr->fWildMask << endl;
+
+
 			fr->max_faults *= m_word_size;
-                        temphack += 4;
 		} else {
-			fr->fWildMask |= (uint64_t)(m_bitwidth-1);
+			fr->fWildMask |= (uint64_t)(m_bitwidth - 1);
 			fr->max_faults *= m_bitwidth;
 		}
 	}

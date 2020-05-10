@@ -16,6 +16,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include "dram_common.hh"
 
 #include <list>
+#include <random>
 
 #include "FaultDomain.hh"
 class FaultRange;
@@ -71,6 +72,10 @@ class DRAMDomain : public FaultDomain
 
 	list<FaultRange*> m_faultRanges;
 
+	//
+	random_device rd;
+	default_random_engine rng;
+
 	ENG  eng;
 	DIST dist;
 	GEN  gen;
@@ -85,7 +90,7 @@ class DRAMDomain : public FaultDomain
 	uint64_t n_faults_transient_tsv, n_faults_permanent_tsv;
 
 	uint32_t m_bitwidth, m_ranks, m_banks, m_rows, m_cols, m_word_size;
-	uint32_t m_logBits, m_logRanks, m_logBanks, m_logRows, m_logCols;
+	uint32_t m_logBits, m_logRanks, m_logBanks, m_logRows, m_logCols, m_logWord;
 };
 
 
