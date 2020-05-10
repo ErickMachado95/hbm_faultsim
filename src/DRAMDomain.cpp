@@ -455,10 +455,10 @@ FaultRange *DRAMDomain::genRandomRange( bool rank, bool bank, bool row, bool col
 			
 			shuffle(rand_vec.begin(), rand_vec.end(), rng);
 			for(int i = 0; i < m_logWord; i++) {
-				cout << rand_vec[i] << endl;
+				//cout << rand_vec[i] << endl;
 				fr->fWildMask |= (uint64_t)(1 << rand_vec[i]);
 			}
-			cout << "-----------" <<  fr->fWildMask << endl;
+			//cout << "-----------" <<  fr->fWildMask << endl;
 
 
 			fr->max_faults *= m_word_size;
