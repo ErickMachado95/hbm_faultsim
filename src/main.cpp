@@ -313,7 +313,7 @@ GroupDomain *genModule3D( void )
 		BCHRepair_cube *bch1 = new BCHRepair_cube( string("3EC4ED"), 3, 4, settings.data_block_bits, settings.codeword_width );
 		stack0->addRepair( bch1 ); //Repair from Fault Domain
 	} else if( settings.repairmode == 5 ) {
-		BCHRepair_cube *bch2 = new BCHRepair_cube( string("6EC7ED"), 2, 3, settings.data_block_bits,settings.codeword_width );
+		BCHRepair_cube *bch2 = new BCHRepair_cube( string("6EC7ED"), 6, 7, settings.data_block_bits,settings.codeword_width );
 		stack0->addRepair( bch2 );
 	}
 	else if( settings.repairmode == 6  && settings.symbol_size_bits == 8) {

@@ -54,14 +54,12 @@ void BCHRepair_cube::repair( FaultDomain *fd, uint64_t &n_undetectable, uint64_t
  
 	// Take each chip in turn.  For every fault range in a chip, see which neighbors intersect its ECC block(s).
 	// Count the failed bits in each ECC block.
-	cout << "num of chips: " << pChips->size() << endl;
 	for( it0 = pChips->begin(); it0 != pChips->end(); it0++ )
 	{
 		DRAMDomain *pDRAM0 = dynamic_cast<DRAMDomain*>((*it0));
 		list<FaultRange*> *pRange0 = pDRAM0->getRanges();
 
 		list<FaultRange*>::iterator itRange0;
-		cout << "num of ranges: " << pRange0->size() << endl;
 		for( itRange0 = pRange0->begin(); itRange0 != pRange0->end(); itRange0++ )
 		{
 			FaultRange *frOrg = (*itRange0); // The pointer to the fault location
